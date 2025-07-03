@@ -48,14 +48,16 @@ const Home = () => {
 
   return (
     <motion.div 
-      className="space-y-16 md:space-y-24"
+      className="space-y-16 md:space-y-24 relative"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
+      {/* Parallax/Glassmorphism Background */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-200/40 via-transparent to-purple-200/40 dark:from-blue-900/30 dark:to-purple-900/30 backdrop-blur-2xl" style={{ pointerEvents: 'none' }} />
       {/* Hero Section */}
       <motion.section
-        className="text-center pt-12 md:pt-20"
+        className="text-center pt-12 md:pt-20 relative"
         variants={itemVariants}
       >
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4">
@@ -80,9 +82,9 @@ const Home = () => {
         <h2 className="text-3xl font-bold text-center mb-10">Why Choose Our Platform?</h2>
         <div className="grid gap-8 md:grid-cols-3">
           {features.map((feature, index) => (
-            <Card key={index} className="text-center">
+            <Card key={index} className="text-center bg-white/60 dark:bg-background/60 backdrop-blur-lg shadow-xl transition-transform duration-300 hover:scale-105">
               <CardHeader>
-                <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit">
+                <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit shadow-md animate-pulse">
                   {feature.icon}
                 </div>
                 <CardTitle className="pt-4">{feature.title}</CardTitle>
@@ -97,7 +99,7 @@ const Home = () => {
 
       {/* Final Call to Action */}
       <motion.section 
-        className="text-center bg-secondary p-12 rounded-lg"
+        className="text-center bg-secondary/60 dark:bg-background/60 p-12 rounded-lg shadow-lg backdrop-blur-lg animate-fade-in"
         variants={itemVariants}
       >
         <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>

@@ -31,6 +31,7 @@ const formSchema = z.object({
 const PostJobForm = ({ onJobPosted }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [apiError, setApiError] = useState(null);
+    const [isGenerating, setIsGenerating] = useState(false);
     const { userInfo } = useAuth();
 
     const form = useForm({
@@ -104,6 +105,33 @@ const PostJobForm = ({ onJobPosted }) => {
             setApiError(errorMessage);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    // AI Description Generation
+    const handleGenerateDescription = async () => {
+        setIsGenerating(true);
+        setApiError(null);
+        try {
+            // Prepare prompt data from form values
+            const values = form.getValues();
+            const payload = {
+                title: values.title,
+                companyName: values.companyName,
+                skills: values.skills,
+                location: values.location,
+                // Add more fields if your AI endpoint expects them
+            };
+            const { data } = await axios.post('http://localhost:5001/api/ai/generate-job-description', payload, userInfo?.token ? { headers: { Authorization: `Bearer ${userInfo.token}` } } : {});
+            if (data && data.description) {
+                form.setValue('description', data.description, { shouldValidate: true });
+            } else {
+                setApiError('AI did not return a description.');
+            }
+        } catch (error) {
+            setApiError('Failed to generate description.');
+        } finally {
+            setIsGenerating(false);
         }
     };
 
@@ -274,8 +302,12 @@ const PostJobForm = ({ onJobPosted }) => {
                             <FormItem>
                                 <FormLabel>Job Description</FormLabel>
                                 <div className="flex justify-end -mb-2">
-                                    <Button type="button" variant="ghost" size="sm">
-                                        Generate with AI
+                                    <Button type="button" variant="ghost" size="sm" onClick={handleGenerateDescription} disabled={isGenerating}>
+                                        {isGenerating ? (
+                                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...</>
+                                        ) : (
+                                            'Generate with AI'
+                                        )}
                                     </Button>
                                 </div>
                                 <FormControl>

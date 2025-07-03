@@ -12,7 +12,10 @@
   }
 
   .dark {
-    /* ...dark theme variables... */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    /* Add more dark theme variables as needed, matching your shadcn/ui palette */
   }
 
   * {

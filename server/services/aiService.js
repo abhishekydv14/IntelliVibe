@@ -14,6 +14,16 @@ const getJsonModel = () => {
   });
 };
 
+// Helper function to get the Gemini model configured for plain text output
+const getTextModel = () => {
+  return genAI.getGenerativeModel({
+    model: "gemini-1.5-flash-latest",
+    generationConfig: {
+      response_mime_type: "text/plain",
+    },
+  });
+};
+
 /**
  * Analyzes a resume against a job description using Gemini.
  * (This function is already correct and remains unchanged)
@@ -134,7 +144,26 @@ Description: ${jobDetails.description}`;
   }
 };
 
+/**
+ * Generates a job description using Gemini based on job details.
+ * @param {Object} jobDetails - The job posting details (title, companyName, skills, location, etc.)
+ * @returns {Promise<string>} The generated job description.
+ */
+const generateJobDescription = async (jobDetails) => {
+  try {
+    const model = getTextModel();
+    const prompt = `You are an expert HR assistant. Write a compelling, clear, and attractive job description for the following job posting. Use a professional tone, highlight the company, required skills, and location. The description should be a single, well-written paragraph of at least 100 words. Do NOT return JSON or any structured data, just the paragraph text.\n\nJob Title: ${jobDetails.title}\nCompany: ${jobDetails.companyName}\nSkills: ${jobDetails.skills}\nLocation: ${jobDetails.location}\n`;
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
+    return responseText;
+  } catch (error) {
+    console.error('Error generating job description:', error);
+    throw new Error('Failed to generate job description: ' + error.message);
+  }
+};
+
 module.exports = {
   analyzeResume,
   generateQuizQuestions,
+  generateJobDescription,
 };

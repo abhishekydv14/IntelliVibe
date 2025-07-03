@@ -1,19 +1,27 @@
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun, Laptop } from "lucide-react"
 import { useTheme } from "./ThemeProvider"
-import { Button } from "@/components/ui/button" // Assumes you've initialized shadcn
+import { Button } from "@/components/ui/button"
+
+const themeOrder = ["light", "dark"];
+const themeLabels = { light: "Light", dark: "Dark" };
+const themeIcons = {
+  light: <Sun className="h-[1.2rem] w-[1.2rem]" />,
+  dark: <Moon className="h-[1.2rem] w-[1.2rem]" />,
+};
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
+  const nextTheme = themeOrder[(themeOrder.indexOf(theme) + 1) % themeOrder.length];
 
   return (
     <Button
       variant="outline"
       size="icon"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(nextTheme)}
+      title={`Switch to ${themeLabels[nextTheme]} mode`}
     >
-      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      {themeIcons[theme]}
       <span className="sr-only">Toggle theme</span>
     </Button>
-  )
+  );
 }

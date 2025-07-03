@@ -7,6 +7,7 @@ dotenv.config();
 const jobRoutes = require('./routes/JobRoutes');
 const authRoutes = require('./routes/authRoutes');
 const applicationRoutes = require('./routes/applicationRoutes');
+const aiRoutes = require('./routes/aiRoutes');
 const path = require('path');
 const fs = require('fs');
 const app = express();
@@ -68,6 +69,7 @@ console.log('server.js loaded');
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobRoutes); // Add this
 app.use('/api/applications', applicationRoutes);
+app.use('/api/ai', aiRoutes);
 
 const PORT = process.env.PORT || 5001;
 
